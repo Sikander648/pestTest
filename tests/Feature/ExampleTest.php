@@ -6,6 +6,8 @@ use Inertia\Testing\AssertableInertia as Assert;
 
 uses(RefreshDatabase::class);
 
+
+
 test('a user can view a project', function () {
     Project::factory()->create([
         'title' => 'title',
@@ -15,17 +17,13 @@ test('a user can view a project', function () {
 
 test('a project requires a description', function () {
     $project = Project::latest()->first();
-    if(! is_string($project->description)){
-        throw new Exception('The test failed');
-    }
+    expect($project->description)->not->toBeEmpty();
 });
 
 test('a project requires a title', function () {
 
     $project = Project::latest()->first();
-    if (!is_string($project->title)) {
-        throw new Exception('The test failed');
-    }
+    expect($project->description)->not->toBeEmpty();
 
 });
 
@@ -43,8 +41,6 @@ test('a user can delete a project', function () {
 });
 
 test('a project has an owner', function () {
-    $project = Project::factory()->create();
-    $response = $this->deleteJson(route('projects.destroy', $project->uuid));
-    $response->assertStatus(Response::HTTP_OK)
-        ->assertJson(['message' => 'The project is deleted successfully.']);
+    $project = Project::latest()->first();
+    expect($project->owner_id)->not->toBeEmpty();
 });

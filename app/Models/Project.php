@@ -9,6 +9,8 @@ class Project extends Model
 {
     use HasFactory;
 
+    protected $fillable = ['title', 'description', 'owner_id'];
+
     protected $hidden = [
         'id',
         'created_at',
