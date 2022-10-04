@@ -17,4 +17,9 @@ class Project extends Model
         'updated_at'
     ];
 
+    public function getRouteKeyName(): string
+    {
+        return 'uuid';
+    }
+
 }

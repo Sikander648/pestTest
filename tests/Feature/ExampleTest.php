@@ -1,7 +1,10 @@
 <?php
 
 use App\Models\Project;
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Auth;
 use Inertia\Testing\AssertableInertia as Assert;
 
 uses(RefreshDatabase::class);
@@ -44,3 +47,15 @@ test('a project has an owner', function () {
     $project = Project::latest()->first();
     expect($project->owner_id)->not->toBeEmpty();
 });
+
+test('a project has an owner', function () {
+    $project = Project::latest()->first();
+    expect($project->owner_id)->not->toBeEmpty();
+});
+
+test('scope user projects', function () {
+    $user = Auth::user()->id;
+    $response = $this->getJson(route('projects.showProjects', $user->uuid));
+    $response->assertStatus(Response::HTTP_OK);
+});
+
