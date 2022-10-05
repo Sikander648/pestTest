@@ -22,6 +22,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::resource('projects', ProjectsController::class)->except('edit');
 
+Route::post('/register-user', [LoginController::class, 'registerUser']);
 Route::post('/login-test', [LoginController::class, 'authenticate']);
 
 Route::middleware('auth:sanctum')->get('/task', function (Request $request) {
