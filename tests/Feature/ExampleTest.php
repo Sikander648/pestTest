@@ -94,4 +94,42 @@ test('test senctum', function () {
     $response->assertOk();
 });
 
+test('test senctum', function () {
+        Sanctum::actingAs(
+            User::factory()->create(),
+            ['view-tasks']
+        );
+        $this->getJson('/api/task')
+        ->assertOk();
+});
+
+
+test('a user can view a project', function () {
+    Sanctum::actingAs(
+        User::factory()->create(),
+        ['view-tasks']
+    );
+    $response = $this->get('/api/show-project/1');
+    $response->assertStatus(Response::HTTP_OK);
+
+});
+
+test('a user can create a project', function () {
+    Sanctum::actingAs(
+        User::factory()->create(),
+        ['view-tasks']
+    );
+    $response = $this->postJson('/api/create-project', ['title' => 'Sally', 'description' => 'description', 'owner_id' => 1]);
+
+    $response
+        ->assertStatus(201)
+        ->assertJson([
+            'title' => 'Sally',
+            'description' => 'description',
+            'owner_id' => 1,
+        ]);
+
+});
+
+
 

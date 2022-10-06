@@ -28,3 +28,16 @@ Route::post('/login-test', [LoginController::class, 'authenticate']);
 Route::middleware('auth:sanctum')->get('/task', function (Request $request) {
     return $request->user();
 });
+
+Route::middleware('auth:sanctum')->get('/show-project/{id?}', function (Request $request) {
+    return Project::find($request->id);
+});
+
+Route::middleware('auth:sanctum')->post('/create-project/', function (Request $request) {
+    return Project::create([
+        'title' => $request->title,
+        'description' => $request->description,
+        'owner_id' => 1
+    ]);
+});
+
