@@ -46,4 +46,15 @@ class ProjectsController extends Controller
 
     }
 
+    public function addTask(Request $request)
+    {
+        $project =  Project::find($request->project_id);
+        $task = $project->addTask(['title' => 'test task']);
+
+        return $task;
+
+
+
+    }
+
 }

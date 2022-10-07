@@ -170,5 +170,23 @@ test('test senctum', function () {
         Storage::disk('local')->assertExists('/');
     });
 
+    it('can store a task', function () {
+        Sanctum::actingAs(
+            User::factory()->create(),
+            ['*']
+        );
+        $project = Project::factory()->create();
+        $response = $this->postJson('/api/add-task', ['project_id' => $project->id]);
+        $response->assertJson(fn(AssertableJson $json) => $json->whereAllType([
+            'task' => 'task',
+
+        ]))
+            ->assertStatus(Response::HTTP_OK)
+            ->assertJson([
+                'task' => 'task',
+            ]);
+    });
+
+
 
 

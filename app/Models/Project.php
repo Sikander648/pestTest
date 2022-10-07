@@ -22,4 +22,14 @@ class Project extends Model
         return 'uuid';
     }
 
+    public function tasks(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(Task::class);
+    }
+    public function addTask($task = null) {
+
+        $this->tasks()->create($task);
+
+    }
+
 }
