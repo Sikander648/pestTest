@@ -160,5 +160,15 @@ test('test senctum', function () {
         ]));
     });
 
+    it('can upload a file', function () {
+        $this->withOutExceptionHandling();
+        Storage::fake('local');
+        $file = UploadedFile::fake()->image('avatar.jpg');
+        $response = $this->post('/api/avatar/store', [
+            'avatar' => $file,
+        ]);
+        Storage::disk('local')->assertExists('/');
+    });
+
 
 

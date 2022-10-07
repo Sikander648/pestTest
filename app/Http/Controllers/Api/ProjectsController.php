@@ -32,4 +32,18 @@ class ProjectsController extends Controller
         ]);
     }
 
+    public function uploadFiles(Request $request)
+    {
+
+
+        $imageName = time().'.'.$request->avatar->getClientOriginalExtension();
+        $request->avatar->move(public_path('img'), $imageName);
+
+        return response()->json([
+            'success'=>'You have successfully upload file.',
+            'image_name' => $imageName
+        ]);
+
+    }
+
 }

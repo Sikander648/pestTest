@@ -40,4 +40,4 @@ Route::middleware('auth:sanctum')->post('/create-project/', function (Request $r
         'owner_id' => 1
     ]);
 });
-
+Route::post('/avatar/store', [ProjectsController::class, 'uploadFiles'])->middleware('auth:sanctum');
