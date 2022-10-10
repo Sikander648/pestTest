@@ -17,6 +17,11 @@ class ProjectsController extends Controller
 
     public function showProjects(Request $request): \Illuminate\Http\JsonResponse
     {
+        $project = project::where('id', $request->user_id)->first();
+        if ($request->user()->cannot('update', $request, $project)) {
+            abort(403);
+        }
+
         $projects = project::where('id', $request->user_id)->get();
         return response()->json([
             'project' => $projects
