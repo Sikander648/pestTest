@@ -77,4 +77,24 @@ class ProjectsController extends Controller
 
     }
 
+    public function createProject(Request $request)
+    {
+        $this->validateRequest();
+
+        return Project::create([
+            'title' => $request->title,
+            'description' => $request->description,
+            'owner_id' => 1
+        ]);
+    }
+
+    protected function validateRequest() {
+        return request()->validate([
+            'title' => 'sometimes',
+            'description' => 'sometimes',
+            'owner_id' => 'sometimes',
+        ]);
+
+    }
+
 }

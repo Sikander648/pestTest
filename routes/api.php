@@ -33,13 +33,7 @@ Route::middleware('auth:sanctum')->get('/show-project/{id?}', function (Request 
     return Project::find($request->id);
 });
 
-Route::middleware('auth:sanctum')->post('/create-project/', function (Request $request) {
-    return Project::create([
-        'title' => $request->title,
-        'description' => $request->description,
-        'owner_id' => 1
-    ]);
-});
+Route::middleware('auth:sanctum')->post('/create-project/', [ProjectsController::class, 'createProject']);
 Route::post('/avatar/store', [ProjectsController::class, 'uploadFiles'])->middleware('auth:sanctum');
 Route::post('/add-task/', [ProjectsController::class, 'addTask'])->middleware('auth:sanctum');
 
