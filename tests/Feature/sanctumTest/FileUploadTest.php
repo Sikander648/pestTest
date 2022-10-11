@@ -11,8 +11,7 @@ namespace Tests\Feature\sanctumTest;
         $this->withOutExceptionHandling();
         Storage::fake('local');
         $file = UploadedFile::fake()->image('avatar.jpg');
-        $user = User::factory()->create();
-        Sanctum::actingAs($user, ['*']);
+        (new loginAsSanctumUser())->loginWithSanctum();
         $response = $this->post('/api/avatar/store', [
             'avatar' => $file,
         ]);

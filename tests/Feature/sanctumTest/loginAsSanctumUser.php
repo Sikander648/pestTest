@@ -7,11 +7,10 @@ use Laravel\Sanctum\Sanctum;
 
 class loginAsSanctumUser
 {
-    public function loginWithSanctum(): void
+    public function loginWithSanctum()
     {
-        Sanctum::actingAs(
-            User::factory()->create(),
-            ['*']
-        );
+        $user = User::factory()->create();
+        Sanctum::actingAs($user, ['*']);
+        return $user;
     }
 }

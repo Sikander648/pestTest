@@ -8,16 +8,14 @@
     use Laravel\Sanctum\Sanctum;
 
     test('a user can view a project', function () {
-        $user = User::factory()->create();
-        Sanctum::actingAs($user, ['*']);
+        (new loginAsSanctumUser())->loginWithSanctum();
         $response = $this->get('/api/show-project/1');
         $response->assertStatus(Response::HTTP_OK);
 
     });
 
     test('a project requires a title', function () {
-        $user = User::factory()->create();
-        Sanctum::actingAs($user, ['*']);
+        (new loginAsSanctumUser())->loginWithSanctum();
         $attributes = Project::factory()->raw(['title' => '']);
         $response = $this->postJson(route('projects.store'), $attributes);
         $response->assertStatus(Response::HTTP_BAD_REQUEST)
@@ -25,7 +23,7 @@
     });
 
     test('a project requires a description', function () {
-        $this->loginWithSanctum();
+        (new loginAsSanctumUser())->loginWithSanctum();
         $attributes = Project::factory()->raw(['description' => '']);
         $response = $this->postJson(route('projects.store'), $attributes);
         $response->assertStatus(Response::HTTP_BAD_REQUEST)
@@ -33,8 +31,7 @@
     });
 
     test('a user can create a project', function () {
-        $user = User::factory()->create();
-        Sanctum::actingAs($user, ['*']);
+        (new loginAsSanctumUser())->loginWithSanctum();
         $project = Project::factory()->create();
         $response = $this->postJson('/api/create-project',
             ['title' => $project->title,
@@ -63,8 +60,7 @@
     });
 
     test('a user can delete a project', function () {
-        $user = User::factory()->create();
-        Sanctum::actingAs($user, ['*']);
+        (new loginAsSanctumUser())->loginWithSanctum();
         $project = Project::factory()->create(['owner_id' => $user->id]);
         $response = $this->deleteJson(route('projects.destroy', $project->uuid));
         $response->assertStatus(Response::HTTP_OK)

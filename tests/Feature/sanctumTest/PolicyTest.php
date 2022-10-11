@@ -9,10 +9,7 @@
 
     test('it can update a project using policy', function () {
         $this->withOutExceptionHandling();
-        Sanctum::actingAs(
-            $user = User::factory()->create(),
-            ['*']
-        );
+        $user = (new loginAsSanctumUser())->loginWithSanctum();
 
         $project = Project::factory()->create();
         $response = $this->putJson("/api/update-project/{$user->id}/{$project->id}");

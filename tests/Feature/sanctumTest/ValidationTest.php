@@ -6,8 +6,7 @@
         use Laravel\Sanctum\Sanctum;
 
         test('can test data types', function () {
-            $user = User::factory()->create();
-            Sanctum::actingAs($user, ['*']);
+            (new loginAsSanctumUser())->loginWithSanctum();
             $project = Project::factory()->create();
             $response = $this->postJson('/api/create-project', ['title' => $project->title, 'description' => $project->description, 'owner_id' => $project->owner_id]);
             $response->assertJson(fn(AssertableJson $json) => $json->whereAllType([
@@ -18,8 +17,7 @@
         });
 
         test('can store a task', function () {
-            $user = User::factory()->create();
-            Sanctum::actingAs($user, ['*']);
+            (new loginAsSanctumUser())->loginWithSanctum();
             $project = Project::factory()->create();
             $response = $this->postJson('/api/add-task', ['project_id' => $project->uuid]);
             $response->assertJson(fn(AssertableJson $json) => $json->whereAllType([
@@ -33,8 +31,7 @@
         });
 
         test('can store a task with missing attributes', function () {
-            $user = User::factory()->create();
-            Sanctum::actingAs($user, ['*']);
+            (new loginAsSanctumUser())->loginWithSanctum();
             $project = Project::factory()->create();
             $response = $this->postJson('/api/create-project', ['description' => $project->id]);
             $response->assertJson(fn(AssertableJson $json) => $json->whereAllType([

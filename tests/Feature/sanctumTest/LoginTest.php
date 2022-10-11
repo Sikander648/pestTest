@@ -14,10 +14,7 @@
         });
 
         test('test login with senctum', function () {
-            Sanctum::actingAs(
-                User::factory()->create(),
-                ['*']
-            );
+            (new loginAsSanctumUser())->loginWithSanctum();
             $response = $this->get('/api/task');
             $response->assertOk();
         });
