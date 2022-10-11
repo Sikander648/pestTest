@@ -88,7 +88,7 @@ test('login a user', function () {
 test('test senctum2', function () {
     Sanctum::actingAs(
         User::factory()->create(),
-        ['view-tasks']
+        ['*']
     );
 
     $response = $this->get('/api/task');
@@ -98,7 +98,7 @@ test('test senctum2', function () {
 test('test senctum', function () {
     Sanctum::actingAs(
         User::factory()->create(),
-        ['view-tasks']
+        ['*']
     );
     $this->getJson('/api/task')
         ->assertOk();
@@ -106,20 +106,14 @@ test('test senctum', function () {
 
 
     test('a user can view a project2', function () {
-        Sanctum::actingAs(
-            User::factory()->create(),
-            ['view-tasks']
-        );
+        $this->loginWithSanctum();
         $response = $this->get('/api/show-project/1');
         $response->assertStatus(Response::HTTP_OK);
 
     });
 
     test('a user can create a project3', function () {
-        Sanctum::actingAs(
-            User::factory()->create(),
-            ['view-tasks']
-        );
+        $this->loginWithSanctum();
         $response = $this->postJson('/api/create-project', ['title' => 'Sally', 'description' => 'description', 'owner_id' => 1]);
 
         $response
@@ -147,10 +141,7 @@ test('test senctum', function () {
 
     it('can test data types', function () {
         $this->withOutExceptionHandling();
-        Sanctum::actingAs(
-            User::factory()->create(),
-            ['view-tasks']
-        );
+        $this->loginWithSanctum();
         $project = Project::factory()->create();
         $response = $this->postJson('/api/create-project', ['title' => $project->title, 'description' => $project->description, 'owner_id' => $project->owner_id]);
         $response->assertJson(fn(AssertableJson $json) => $json->whereAllType([
@@ -171,10 +162,7 @@ test('test senctum', function () {
     });
 
     it('can store a task', function () {
-        Sanctum::actingAs(
-            User::factory()->create(),
-            ['*']
-        );
+        $this->loginWithSanctum();
         $project = Project::factory()->create();
         $response = $this->postJson('/api/add-task', ['project_id' => $project->id]);
         $response->assertJson(fn(AssertableJson $json) => $json->whereAllType([
@@ -210,6 +198,14 @@ test('test senctum', function () {
                     'owner_id' => $project->owner_id,
                 ]);
         });
+
+        function loginWithSanctum(): void
+        {
+            Sanctum::actingAs(
+                User::factory()->create(),
+                ['*']
+            );
+        }
 
 
 
