@@ -85,7 +85,7 @@ test('login a user', function () {
     $response->assertStatus(201)->assertJson(['message' => 'User is Loged In']);
 });
 
-test('test senctum', function () {
+test('test senctum2', function () {
     Sanctum::actingAs(
         User::factory()->create(),
         ['view-tasks']
@@ -105,7 +105,7 @@ test('test senctum', function () {
 });
 
 
-    test('a user can view a project', function () {
+    test('a user can view a project2', function () {
         Sanctum::actingAs(
             User::factory()->create(),
             ['view-tasks']
@@ -115,7 +115,7 @@ test('test senctum', function () {
 
     });
 
-    test('a user can create a project', function () {
+    test('a user can create a project3', function () {
         Sanctum::actingAs(
             User::factory()->create(),
             ['view-tasks']
@@ -186,6 +186,30 @@ test('test senctum', function () {
                 'task' => 'task',
             ]);
     });
+
+
+    it('it can update a project', function () {
+        $this->withOutExceptionHandling();
+            Sanctum::actingAs(
+             $user =   User::factory()->create(),
+                ['*']
+            );
+
+            $project = Project::factory()->create();
+            $response = $this->putJson("/api/update-project/{$user->id}/{$project->id}");
+            $response->assertJson(fn(AssertableJson $json) => $json->whereAllType([
+                'title' => 'string',
+                'description' => 'string',
+                'owner_id' => 'integer',
+
+            ]))
+                ->assertStatus(Response::HTTP_OK)
+                ->assertJson([
+                    'title' => $project->title,
+                    'description' => $project->description,
+                    'owner_id' => $project->owner_id,
+                ]);
+        });
 
 
 

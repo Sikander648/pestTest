@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Project;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class ProjectsController extends Controller
@@ -18,9 +19,7 @@ class ProjectsController extends Controller
     public function showProjects(Request $request): \Illuminate\Http\JsonResponse
     {
         $project = project::where('id', $request->user_id)->first();
-        if ($request->user()->cannot('update', $request, $project)) {
-            abort(403);
-        }
+
 
         $projects = project::where('id', $request->user_id)->get();
         return response()->json([
@@ -59,6 +58,22 @@ class ProjectsController extends Controller
         return $task;
 
 
+
+    }
+
+    public function updateProject($userId, $project_id, Request $request)
+    {
+        $user = User::find($userId);
+        $project = Project::find($project_id);
+        if (request()->user()->can('update', $project)) {
+            abort(403);
+        }
+
+        return Project::create([
+            'title' => '$request->title',
+            'description' => '$request->description',
+            'owner_id' => 1
+        ]);
 
     }
 

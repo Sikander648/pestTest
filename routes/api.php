@@ -43,5 +43,7 @@ Route::middleware('auth:sanctum')->post('/create-project/', function (Request $r
 Route::post('/avatar/store', [ProjectsController::class, 'uploadFiles'])->middleware('auth:sanctum');
 Route::post('/add-task/', [ProjectsController::class, 'addTask'])->middleware('auth:sanctum');
 
+Route::put('/update-project/{user_id}/{project_id}', [ProjectsController::class, 'updateProject'])->middleware('auth:sanctum');
+
 
 

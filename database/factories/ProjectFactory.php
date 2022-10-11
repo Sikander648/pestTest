@@ -9,15 +9,13 @@ use Illuminate\Database\Eloquent\Factories\Factory;
  */
 class ProjectFactory extends Factory
 {
-    /**
-     * Define the model's default state.
-     *
-     * @return array<string, mixed>
-     */
+
     public function definition()
     {
         return [
-            //
+            'title' => fake()->title(),
+            'description' => fake()->sentence(),
+            'owner_id' => rand(),
         ];
     }
 }

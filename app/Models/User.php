@@ -42,8 +42,8 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    public function getRouteKeyName(): string
-    {
-        return 'uuid';
-    }
+//    public function getRouteKeyName(): string
+//    {
+//        return 'uuid';
+//    }
 }
