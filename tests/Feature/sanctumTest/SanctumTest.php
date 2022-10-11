@@ -140,7 +140,7 @@
             $project = Project::factory()->create();
             $response = $this->postJson('/api/create-project', ['description' => $project->id]);
             $response->assertJson(fn(AssertableJson $json) => $json->whereAllType([
-                'description' => $project->description,
+                'description' => 'string',
 
             ]))
                 ->assertStatus(Response::HTTP_OK)
