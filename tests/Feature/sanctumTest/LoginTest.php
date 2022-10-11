@@ -5,13 +5,7 @@
         use App\Models\User;
         use Laravel\Sanctum\Sanctum;
 
-        function loginWithSanctum(): void
-        {
-            Sanctum::actingAs(
-                User::factory()->create(),
-                ['*']
-            );
-        }
+
 
         test('sanctum-csrf-cookie', function () {
 
