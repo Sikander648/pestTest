@@ -4,6 +4,11 @@
 
         // test sanctum
 
+        use App\Models\Project;
+        use App\Models\User;
+        use Illuminate\Http\Response;
+        use Laravel\Sanctum\Sanctum;
+
         function loginWithSanctum(): void
         {
             Sanctum::actingAs(
@@ -44,6 +49,22 @@
             $response = $this->get('/api/show-project/1');
             $response->assertStatus(Response::HTTP_OK);
 
+        });
+
+        test('a project requires a title', function () {
+            $this->loginWithSanctum();
+            $attributes = Project::factory()->raw(['title' => '']);
+            $response = $this->postJson(route('projects.store'), $attributes);
+            $response->assertStatus(Response::HTTP_BAD_REQUEST)
+                ->assertJson(['message' => 'The title is required.']);
+        });
+
+        test('a project requires a description', function () {
+            $this->loginWithSanctum();
+            $attributes = Project::factory()->raw(['description' => '']);
+            $response = $this->postJson(route('projects.store'), $attributes);
+            $response->assertStatus(Response::HTTP_BAD_REQUEST)
+                ->assertJson(['message' => 'The description is required.']);
         });
 
         it('a user can create a project', function () {
@@ -100,7 +121,7 @@
         it('can store a task', function () {
             $this->loginWithSanctum();
             $project = Project::factory()->create();
-            $response = $this->postJson('/api/add-task', ['project_id' => $project->id]);
+            $response = $this->postJson('/api/add-task', ['project_id' => $project->uuid]);
             $response->assertJson(fn(AssertableJson $json) => $json->whereAllType([
                 'task' => 'task',
 
@@ -109,6 +130,15 @@
                 ->assertJson([
                     'task' => 'task',
                 ]);
+        });
+
+        test('a user can delete a project', function () {
+            $user = User::factory()->create();
+            Sanctum::actingAs($user, ['*']);
+            $project = Project::factory()->create(['owner_id' => $user->id]);
+            $response = $this->deleteJson(route('projects.destroy', $project->uuid));
+            $response->assertStatus(Response::HTTP_OK)
+                ->assertJson(['message' => 'The project is deleted successfully.']);
         });
 
 
