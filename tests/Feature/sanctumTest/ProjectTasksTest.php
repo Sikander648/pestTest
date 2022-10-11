@@ -3,6 +3,10 @@
 namespace Tests\Feature\sanctumTest;
 
     use App\Models\Project;
+    use Illuminate\Http\Response;
+    use Illuminate\Http\UploadedFile;
+    use Illuminate\Support\Facades\Storage;
+
 
     test('can store a task', function () {
         (new loginAsSanctumUser())->loginWithSanctum();
@@ -17,4 +21,5 @@ namespace Tests\Feature\sanctumTest;
                 'task' => $project->task->title,
             ]);
     });
+
 

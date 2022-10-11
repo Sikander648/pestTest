@@ -1,13 +1,14 @@
 <?php
 
-    namespace Tests\Feature\sanctumTest;
+namespace Tests\Feature\sanctumTest;
 
-    use App\Models\Project;
-    use App\Models\User;
-    use Illuminate\Http\Response;
-    use Laravel\Sanctum\Sanctum;
 
-    test('a user can view a project', function () {
+use App\Models\Project;
+use Illuminate\Http\Response;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Storage;
+
+test('a user can view a project', function () {
         (new loginAsSanctumUser())->loginWithSanctum();
         $response = $this->get('/api/show-project/1');
         $response->assertStatus(Response::HTTP_OK);
@@ -60,9 +61,41 @@
     });
 
     test('a user can delete a project', function () {
-        (new loginAsSanctumUser())->loginWithSanctum();
+        $user = (new loginAsSanctumUser())->loginWithSanctum();
         $project = Project::factory()->create(['owner_id' => $user->id]);
         $response = $this->deleteJson(route('projects.destroy', $project->uuid));
         $response->assertStatus(Response::HTTP_OK)
             ->assertJson(['message' => 'The project is deleted successfully.']);
     });
+
+    test('it can update a project using policy', function () {
+        $this->withOutExceptionHandling();
+        $user = (new loginAsSanctumUser())->loginWithSanctum();
+
+        $project = Project::factory()->create();
+        $response = $this->putJson("/api/update-project/{$user->id}/{$project->id}");
+        $response->assertJson(fn(AssertableJson $json) => $json->whereAllType([
+            'title' => 'string',
+            'description' => 'string',
+            'owner_id' => 'integer',
+
+        ]))
+            ->assertStatus(Response::HTTP_OK)
+            ->assertJson([
+                'title' => $project->title,
+                'description' => $project->description,
+                'owner_id' => $project->owner_id,
+            ]);
+    });
+
+    test('can upload a file', function () {
+        $this->withOutExceptionHandling();
+        Storage::fake('local');
+        $file = UploadedFile::fake()->image('avatar.jpg');
+        (new loginAsSanctumUser())->loginWithSanctum();
+        $response = $this->post('/api/avatar/store', [
+            'avatar' => $file,
+        ]);
+        Storage::disk('local')->assertExists('/');
+    });
+
