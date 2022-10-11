@@ -9,7 +9,7 @@ namespace Tests\Feature\sanctumTest;
         $project = Project::factory()->create();
         $response = $this->postJson('/api/add-task', ['project_id' => $project->uuid]);
         $response->assertJson(fn(AssertableJson $json) => $json->whereAllType([
-            'task' => $project->task->title,
+            'task' => 'string',
 
         ]))
             ->assertStatus(Response::HTTP_OK)
