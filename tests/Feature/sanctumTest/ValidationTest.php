@@ -1,12 +1,9 @@
 <?php
-
-
         // test sanctum
-
         use App\Models\Project;
-use App\Models\User;
-use Illuminate\Http\Response;
-use Laravel\Sanctum\Sanctum;
+        use App\Models\User;
+        use Illuminate\Http\Response;
+        use Laravel\Sanctum\Sanctum;
 
         test('can test data types', function () {
             $user = User::factory()->create();
