@@ -106,4 +106,12 @@ class ProjectsController extends Controller
         ]);
     }
 
+    public function updateActivity($prjectId) {
+        $project = Project::with('activity')->find($prjectId);
+        return $project->activity()->update([
+            'description' => 'updated',
+            'project_id' => $project->project_id
+        ]);
+    }
+
 }

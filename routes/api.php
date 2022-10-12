@@ -39,6 +39,7 @@ Route::post('/add-task/', [ProjectsController::class, 'addTask'])->middleware('a
 
 Route::put('/update-project/{user_id}/{project_id}', [ProjectsController::class, 'updateProject'])->middleware('auth:sanctum');
 Route::put('/create-activity/{project_id}', [ProjectsController::class, 'createActivity'])->middleware('auth:sanctum');
+Route::put('/update-activity/{project_id}', [ProjectsController::class, 'updateActivity'])->middleware('auth:sanctum');
 
 
 
