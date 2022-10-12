@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\Activity;
 use App\Models\Project;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -95,6 +96,14 @@ class ProjectsController extends Controller
             'owner_id' => 'sometimes',
         ]);
 
+    }
+
+    public function createActivity($prjectId) {
+        $project = Project::with('activity')->find($prjectId);
+        return $project->activity()->create([
+            'description' => 'created',
+            'project_id' => $project->project_id
+        ]);
     }
 
 }

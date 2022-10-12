@@ -2,6 +2,13 @@
 
 use Illuminate\Support\Facades\Route;
 
+//\App\Models\Project::created(function ($project){
+//    \App\Models\Activity::create([
+//        'project_id' => $project->id,
+//        'description' => $project->description
+//    ]);
+//});
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
