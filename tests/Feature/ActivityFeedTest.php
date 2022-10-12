@@ -53,5 +53,5 @@ uses(RefreshDatabase::class);
                 'created_at' => $project->activity->last()->created_at,
                 'updated_at' => $project->activity->last()->updated_at,
             ], $strict = false);
-        $this->assertCount(2, $project->activity);
+        $this->assertCount(1, $project->activity);
     });
