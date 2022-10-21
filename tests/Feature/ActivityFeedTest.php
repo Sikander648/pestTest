@@ -93,3 +93,43 @@ uses(RefreshDatabase::class);
             ],false);
 
     });
+
+    test('a task can be marked as incomplete', function () {
+        $this->withOutExceptionHandling();
+        (new loginAsSanctumUser())->loginWithSanctum();
+        $project = Project::factory()->create();
+        $project->addTask([
+            'complete' => false
+        ]);
+        $response = $this->postJson('/api/mark-task-as-incomplete',
+            [
+                'title' => $project->title,
+                'description' => $project->description,
+                'owner_id' => $project->owner_id
+            ]
+        )->assertStatus(201)
+            ->assertJson([
+                'complete' => false,
+            ],false);
+
+    });
+
+    test('a task can be marked as incomplete', function () {
+        $this->withOutExceptionHandling();
+        (new loginAsSanctumUser())->loginWithSanctum();
+        $project = Project::factory()->create();
+        $project->addTask([
+            'complete' => false
+        ]);
+        $response = $this->postJson('/api/mark-task-as-incomplete',
+            [
+                'title' => $project->title,
+                'description' => $project->description,
+                'owner_id' => $project->owner_id
+            ]
+        )->assertStatus(201)
+            ->assertJson([
+                'complete' => false,
+            ],false);
+
+    });
