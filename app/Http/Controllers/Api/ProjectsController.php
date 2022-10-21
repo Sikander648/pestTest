@@ -106,12 +106,30 @@ class ProjectsController extends Controller
         ]);
     }
 
-    public function updateActivity($prjectId) {
-        $project = Project::with('activity')->find($prjectId);
+    public function updateActivity($projectId) {
+        $project = Project::with('activity')->find($projectId);
         return $project->activity()->update([
             'description' => 'updated',
             'project_id' => $project->project_id
         ]);
+    }
+
+    public function creatingATaskRecordsActivity(Request $request) {
+
+        $this->validateRequest();
+
+        $project = Project::create([
+            'title' => $request->title,
+            'description' => $request->description,
+            'owner_id' => 1
+        ]);
+
+        $project = Project::with('activity')->find($project->id);
+        return $project->activity()->create([
+            'description' => 'created',
+            'project_id' => $project->project_id
+        ]);
+
     }
 
 }

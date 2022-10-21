@@ -55,3 +55,41 @@ uses(RefreshDatabase::class);
             ], $strict = false);
         $this->assertCount(1, $project->activity);
     });
+
+    test('updating a project generates activity', function () {
+        $this->withOutExceptionHandling();
+        (new loginAsSanctumUser())->loginWithSanctum();
+        $project = Project::factory()->create();
+        $response = $this->postJson('/api/creating-a-project-task-records-activity',
+                [
+                     'title' => $project->title,
+                     'description' => $project->description,
+                     'owner_id' => $project->owner_id
+                ]
+        )->assertStatus(201)
+            ->assertJson([
+                'id' => $project->activity->last()->id,
+                'project_id' => $project->activity->last()->id,
+                'description' => 'task_created',
+                'created_at' => $project->activity->last()->created_at,
+                'updated_at' => $project->activity->last()->updated_at,
+            ],false);
+
+    });
+
+    test('test if task is complete', function () {
+        $this->withOutExceptionHandling();
+        (new loginAsSanctumUser())->loginWithSanctum();
+        $project = Project::factory()->create();
+        $response = $this->postJson('/api/update-task-status',
+            [
+                'title' => $project->title,
+                'description' => $project->description,
+                'owner_id' => $project->owner_id
+            ]
+        )->assertStatus(201)
+            ->assertJson([
+                'complete' => true,
+            ],false);
+
+    });

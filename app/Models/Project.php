@@ -29,6 +29,11 @@ class Project extends Model
     public function addTask($task = null) {
 
         $this->tasks()->create($task);
+        Activity::create([
+            'project_id' => 4,
+            'description' => 'task_created'
+
+        ]);
 
     }
 
